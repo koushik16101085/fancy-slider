@@ -20,14 +20,15 @@ document.getElementById("search")
   .addEventListener("keypress", function (event) {
     if (event.key === 'Enter') {
       document.getElementById("search-btn").click();
+
     }
   });
 
 const showImages = (images) => {
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
-  
-  
+
+
   // show gallery title
   galleryHeader.style.display = 'flex';
   images.forEach(image => {
@@ -35,12 +36,13 @@ const showImages = (images) => {
     let div = document.createElement('div');
     div.className = 'col-lg-3 col-md-4 col-xs-6 img-item mb-2';
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
-    gallery.appendChild(div)
+    gallery.appendChild(div);
+    toggleSpinner(false);
   })
-
 }
 
 const getImages = (query) => {
+  toggleSpinner(true);
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -62,8 +64,8 @@ const selectItem = (event, img) => {
 }
 var timer
 const createSlider = () => {
-  
-  
+
+
   // check slider image length
   if (sliders.length < 2) {
     alert('Select at least 2 image.')
@@ -72,8 +74,8 @@ const createSlider = () => {
   const duration = document.getElementById('duration').value || 1000;
 
   if (duration > 0) {
-    
-    
+
+
     // crate slider previous next area
     sliderContainer.innerHTML = '';
     const prevNext = document.createElement('div');
@@ -85,8 +87,8 @@ const createSlider = () => {
 
     sliderContainer.appendChild(prevNext)
     document.querySelector('.main').style.display = 'block';
-    
-    
+
+
     // hide image aria
     imagesArea.style.display = 'none';
     sliders.forEach(slide => {
@@ -154,5 +156,22 @@ sliderBtn.addEventListener('click', function () {
 })
 
 
+//1.Bonus part:Create slider Enter The Key;
+document.getElementById("duration")
+  .addEventListener("keypress", function (event) {
+    if (event.key === 'Enter') {
+      document.getElementById("create-slider").click();
+    }
+  });
 
 
+//2.Bonus part: Spinner
+const toggleSpinner = (show) => {
+  const spinner = document.getElementById('loading-spinner');
+  if (show) {
+    spinner.classList.remove('d-none');
+  }
+  else {
+    spinner.classList.add('d-none')
+  }
+}
